@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREE DOM • Tableau de Bord Officiel Médiamétrie</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+        
+        :root {
+            --freedom-blue: #0033A0;
+            --freedom-light-blue: #0066CC;
+            --freedom-sky: #00A0DF;
+            --freedom-cyan: #00D4FF;
+            --freedom-navy: #001F5F;
+            --freedom-gold: #FFD700;
+            --accent: #00ffff;
+            --background: #0a0a0f;
+            --surface: rgba(0, 51, 160, 0.2);
+            --surface-light: rgba(0, 102, 204, 0.15);
+            --surface-dark: rgba(0, 31, 95, 0.3);
+            --text: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+            --success: #00ff88;
+            --warning: #ffbb00;
+            --danger: #ff3366;
+            --info: #00D4FF;
+            --gradient-freedom: linear-gradient(135deg, #0033A0, #0066CC, #00A0DF, #00D4FF);
+            --gradient-blue: linear-gradient(135deg, #0033A0, #0066CC);
+            --gradient-cyan: linear-gradient(135deg, #00A0DF, #00D4FF);
+            --gradient-gold: linear-gradient(135deg, #FFD700, #FFAA00);
+            --glass-effect: rgba(0, 212, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--glass-effect) 1px, transparent 1px),
+                linear-gradient(90deg, var(--glass-effect) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--freedom-cyan);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) translateX(-10vw);
+            }
+            to {
+                transform: translateY(-100vh) translateX(10vw);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Freedom Blue */
+        .header {
+            background: var(--surface-dark);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--freedom-cyan);
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 212, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-freedom);
+            opacity: 0.1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .logo::after {
+            content: 'RÉUNION • DEPUIS 1981';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            font-size: 0.3em;
+            font-weight: 400;
+            background: var(--gradient-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+        }
+
+        .mediametrie-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 25px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--freedom-cyan);
+            border-radius: 50px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .mediametrie-icon {
+            font-size: 1.2em;
+            color: var(--freedom-cyan);
+        }
+
+        .update-badge {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .last-update {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 25px;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid var(--success);
+            border-radius: 50px;
+            color: var(--success);
+            font-size: 0.9em;
+        }
+
+        /* Stats principales */
+        .main-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 25px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--freedom-cyan);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: var(--freedom-cyan);
+        }
+
+        .stat-source {
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 0.8em;
+            color: var(--text-dim);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 3.5em;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 5px;
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.95em;
+        }
+
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+        .trend-stable { color: var(--warning); }
+
+        /* Grille classement */
+        .ranking-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .ranking-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 25px;
+            padding: 25px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-title i {
+            color: var(--freedom-cyan);
+        }
+
+        .chart-title span {
+            background: var(--gradient-freedom);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 400;
+        }
+
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ranking-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .ranking-position {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-freedom);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .ranking-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .ranking-details {
+            display: flex;
+            gap: 20px;
+            color: var(--text-dim);
+            font-size: 0.85em;
+        }
+
+        .ranking-value {
+            font-weight: 700;
+            color: var(--freedom-cyan);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-freedom);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        /* Émissions */
+        .shows-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .show-card {
+            background: var(--surface-light);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .show-card:hover {
+            border-color: var(--freedom-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .show-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--freedom-cyan);
+        }
+
+        .show-host {
+            color: var(--text-dim);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .show-time {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        /* Fréquences */
+        .frequencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .frequency-card {
+            background: rgba(0, 51, 160, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .frequency-card:hover {
+            border-color: var(--freedom-cyan);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .frequency-city {
+            font-weight: 600;
+        }
+
+        .frequency-value {
+            background: var(--gradient-freedom);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 30px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9em;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .source-note {
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(0, 51, 160, 0.2);
+            border-radius: 10px;
+            font-size: 0.85em;
+        }
+
+        .quote {
+            font-style: italic;
+            color: var(--freedom-cyan);
+            margin: 10px 0;
+        }
+
+        .update-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 20px;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 50px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">
+                    FREE DOM
+                </div>
+                <div class="mediametrie-badge">
+                    <i class="fas fa-chart-line mediametrie-icon"></i>
+                    <span id="periodDisplay">MÉDIAMÉTRIE • SEPTEMBRE-NOVEMBRE 2025</span>
+                </div>
+                <div class="last-update" id="updateDisplay">
+                    <i class="fas fa-sync-alt"></i>
+                    <span id="updateText">Mise à jour: 10/12/2025</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Indicateur de mise à jour hebdomadaire -->
+        <div class="update-indicator">
+            <i class="fas fa-calendar-week" style="color: var(--freedom-cyan);"></i>
+            <span>Mise à jour automatique tous les lundis • Prochaine mise à jour: <span id="nextUpdate">17/12/2025</span></span>
+            <i class="fas fa-check-circle" style="color: var(--success); margin-left: auto;"></i>
+        </div>
+
+        <!-- Stats principales Free Dom 1 -->
+        <div class="main-stats">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📻</div>
+                    <div class="stat-source">Free Dom 1</div>
+                </div>
+                <div class="stat-value" id="freedom1Pda">33,5%</div>
+                <div class="stat-label">PART D'AUDIENCE (PDA)</div>
+                <div class="stat-trend" id="freedom1Trend1">
+                    <span class="trend-down">▼ -0,8 pt</span>
+                    <span>vs semestre précédent</span>
+                </div>
+                <div class="stat-trend" id="freedom1Trend2">
+                    <span class="trend-down">▼ -5,8 pts</span>
+                    <span>vs 2024</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-source">Free Dom 1</div>
+                </div>
+                <div class="stat-value" id="audienceValue">177 600</div>
+                <div class="stat-label">AUDITEURS QUOTIDIENS</div>
+                <div class="stat-trend" id="audienceTrend">
+                    <span class="trend-down">▼ -7%</span>
+                    <span>vs 2024</span>
+                </div>
+                <div class="stat-trend">
+                    <span id="cumulValue">24,3%</span> d'audience cumulée
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-source">Free Dom 1</div>
+                </div>
+                <div class="stat-value" id="dureeValue">2h34</div>
+                <div class="stat-label">DURÉE D'ÉCOUTE QUOTIDIENNE</div>
+                <div class="stat-trend" id="dureeTrend">
+                    <span class="trend-stable">● Stable</span>
+                    <span>vs semestre précédent</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Classement général des radios -->
+        <div class="ranking-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">
+                        <i class="fas fa-trophy"></i> CLASSEMENT GÉNÉRAL (PDA)
+                        <span id="rankingPeriod">SEPT-NOV 2025</span>
+                    </div>
+                </div>
+                <div class="ranking-list" id="ranking-list">
+                    <!-- Rempli par JS -->
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">
+                        <i class="fas fa-music"></i> FREE DOM 2
+                        <span>PROGRESSION</span>
+                    </div>
+                </div>
+                <div class="ranking-list">
+                    <div class="ranking-item">
+                        <div class="ranking-position">6</div>
+                        <div class="ranking-info">
+                            <div class="ranking-name">Free Dom 2</div>
+                            <div class="ranking-details">
+                                <span>PDA: <span class="ranking-value" id="freedom2Pda">5,3%</span></span>
+                                <span>Évolution: <span class="trend-up" id="freedom2Trend">▲ +1,9 pt</span></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="freedom2Progress" style="width: 16%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(0,255,136,0.05); border-radius: 15px;">
+                        <div style="color: var(--success); font-weight: 600;">📈 Plus forte progression du marché</div>
+                        <div style="color: var(--text-dim); font-size: 0.9em;">+1,9 point en un an</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Émissions phares -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-title">
+                    <i class="fas fa-microphone-alt"></i> ÉMISSIONS PHARES
+                    <span>PROGRAMMATION 2025</span>
+                </div>
+            </div>
+            <div class="shows-grid" id="showsGrid">
+                <!-- Rempli par JS -->
+            </div>
+        </div>
+
+        <!-- Fréquences FM -->
+        <div class="chart-card" style="margin-top: 25px;">
+            <div class="chart-header">
+                <div class="chart-title">
+                    <i class="fas fa-broadcast-tower"></i> FRÉQUENCES FM • ÎLE DE LA RÉUNION
+                    <span>COUVERTURE TOTALE</span>
+                </div>
+            </div>
+            <div class="frequencies-grid" id="frequenciesGrid">
+                <!-- Rempli par JS -->
+            </div>
+        </div>
+
+        <!-- Footer avec sources -->
+        <div class="footer">
+            <div>FREE DOM • 1ÈRE RADIO DE LA RÉUNION DEPUIS 1981</div>
+            <div class="quote">
+                <i class="fas fa-quote-left"></i> Nous informer, c'est vous informer <i class="fas fa-quote-right"></i>
+            </div>
+            <div class="source-note" id="sourceNote">
+                <i class="fas fa-database"></i> Sources : Médiamétrie Étude Métridom Septembre-Novembre 2025 - Audience cumulée 13 ans et plus<br>
+                <i class="fas fa-calendar-alt"></i> Période d'enquête : 18 août au 16 novembre 2025<br>
+                <i class="fas fa-users"></i> Population de référence : 13 ans et plus, 729 600 personnes à La Réunion
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const DATA_URL = 'data.json?t=' + Date.now(); // Pour éviter le cache
+        let currentData = null;
+
+        // Données par défaut (si le fichier JSON n'existe pas)
+        const defaultData = {
+            lastUpdate: "2025-12-10",
+            nextUpdate: "2025-12-17",
+            period: "Septembre-Novembre 2025",
+            freedom1: {
+                pda: 33.5,
+                audience: 177600,
+                cumul: 24.3,
+                evolution: -0.8,
+                evolutionYear: -5.8,
+                audienceEvolution: -7,
+                duree: "2h34"
+            },
+            freedom2: {
+                pda: 5.3,
+                evolution: 1.9,
+                progressWidth: 16
+            },
+            rankings: [
+                { position: 1, name: "Free Dom 1", pda: 33.5, evolution: -0.8 },
+                { position: 2, name: "EXO FM", pda: 11.3, evolution: 0.5 },
+                { position: 3, name: "Réunion La 1ère", pda: 10.1, evolution: -0.8 },
+                { position: 4, name: "Chérie FM", pda: 5.9, evolution: -0.4 },
+                { position: 5, name: "Antenne Réunion Radio", pda: 5.6, evolution: 2.0 },
+                { position: 6, name: "Free Dom 2", pda: 5.3, evolution: 1.9 },
+                { position: 7, name: "NRJ Réunion", pda: 4.3, evolution: -0.9 },
+                { position: 8, name: "RER", pda: 3.9, evolution: -0.2 },
+                { position: 9, name: "Rire et Chansons", pda: 1.7, evolution: 0.2 }
+            ],
+            shows: [
+                { name: "TRAFIC", host: "Bobby", time: "15h-19h • Lundi-Vendredi", desc: "Animateur historique, voix emblématique" },
+                { name: "DROIT DE PAROLE", host: "Mme Aude & Bobby", time: "17h-18h • Lundi-Vendredi", desc: "Émission juridique, depuis 1987" },
+                { name: "LA MATINALE", host: "Francky", time: "6h-9h • Semaine", desc: "Humour et bonne humeur" },
+                { name: "CHALEUR TROPICALE", host: "Équipe", time: "20h-minuit • Tous les jours", desc: "Rencontres, messages personnels" },
+                { name: "LE SON DU SOLEIL", host: "Max", time: "10h-15h", desc: "Musique et bonne humeur" },
+                { name: "FREEDOMILLIONS", host: "Équipe", time: "7h15, 8h15, 11h10", desc: "Jeu de cagnotte" }
+            ],
+            frequencies: [
+                { city: "Saint-Denis", freq: "97.4" },
+                { city: "Saint-Pierre", freq: "97.4" },
+                { city: "Saint-Paul", freq: "95.0" },
+                { city: "Saint-André", freq: "106.2" },
+                { city: "Saint-Benoît", freq: "101.3" },
+                { city: "Saint-Joseph", freq: "106.1" },
+                { city: "Cilaos", freq: "98.8" },
+                { city: "Le Port", freq: "93.4" },
+                { city: "Saint-Gilles", freq: "107.1" },
+                { city: "Saint-Leu", freq: "95.0" },
+                { city: "Sainte-Suzanne", freq: "103.8" },
+                { city: "La Possession", freq: "93.4" }
+            ]
+        };
+
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particle.style.background = ['#0033A0', '#0066CC', '#00A0DF', '#00D4FF'][Math.floor(Math.random() * 4)];
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Chargement des données depuis data.json
+        async function loadData() {
+            try {
+                // Tentative de chargement du fichier JSON
+                const response = await fetch(DATA_URL);
+                let data = defaultData;
+                
+                if (response.ok) {
+                    data = await response.json();
+                } else {
+                    console.log('Utilisation des données par défaut');
+                }
+                
+                currentData = data;
+                updateUI(data);
+                
+            } catch (error) {
+                console.error('Erreur chargement:', error);
+                updateUI(defaultData);
+            }
+        }
+
+        // Mise à jour de l'interface
+        function updateUI(data) {
+            // Formatage des dates
+            const lastUpdate = new Date(data.lastUpdate || '2025-12-10');
+            const nextUpdate = new Date(lastUpdate);
+            nextUpdate.setDate(lastUpdate.getDate() + 7);
+            
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            
+            document.getElementById('updateText').textContent = 
+                `Mise à jour: ${lastUpdate.toLocaleDateString('fr-FR', options)}`;
+            document.getElementById('nextUpdate').textContent = 
+                nextUpdate.toLocaleDateString('fr-FR', options);
+            
+            document.getElementById('periodDisplay').textContent = 
+                `MÉDIAMÉTRIE • ${data.period || 'SEPTEMBRE-NOVEMBRE 2025'}`;
+            
+            // Stats Free Dom 1
+            document.getElementById('freedom1Pda').textContent = data.freedom1.pda + '%';
+            document.getElementById('audienceValue').textContent = 
+                data.freedom1.audience.toLocaleString('fr-FR');
+            document.getElementById('cumulValue').textContent = data.freedom1.cumul + '%';
+            document.getElementById('dureeValue').textContent = data.freedom1.duree;
+            
+            document.getElementById('freedom1Trend1').innerHTML = `
+                <span class="trend-down">▼ ${Math.abs(data.freedom1.evolution)} pt</span>
+                <span>vs semestre précédent</span>
+            `;
+            
+            document.getElementById('freedom1Trend2').innerHTML = `
+                <span class="trend-down">▼ ${Math.abs(data.freedom1.evolutionYear)} pts</span>
+                <span>vs 2024</span>
+            `;
+            
+            document.getElementById('audienceTrend').innerHTML = `
+                <span class="trend-down">▼ ${Math.abs(data.freedom1.audienceEvolution)}%</span>
+                <span>vs 2024</span>
+            `;
+            
+            document.getElementById('dureeTrend').innerHTML = `
+                <span class="trend-stable">● Stable</span>
+                <span>vs semestre précédent</span>
+            `;
+            
+            // Free Dom 2
+            document.getElementById('freedom2Pda').textContent = data.freedom2.pda + '%';
+            document.getElementById('freedom2Trend').innerHTML = 
+                `▲ +${data.freedom2.evolution} pt`;
+            document.getElementById('freedom2Progress').style.width = data.freedom2.progressWidth + '%';
+            
+            document.getElementById('rankingPeriod').textContent = data.period || 'SEPT-NOV 2025';
+            
+            // Classement
+            loadRanking(data.rankings);
+            
+            // Émissions
+            loadShows(data.shows);
+            
+            // Fréquences
+            loadFrequencies(data.frequencies);
+            
+            // Source note
+            document.getElementById('sourceNote').innerHTML = `
+                <i class="fas fa-database"></i> Sources : Médiamétrie Étude Métridom ${data.period} - Audience cumulée 13 ans et plus<br>
+                <i class="fas fa-calendar-alt"></i> Dernière mise à jour: ${lastUpdate.toLocaleDateString('fr-FR', options)}<br>
+                <i class="fas fa-sync-alt"></i> Prochaine mise à jour: ${nextUpdate.toLocaleDateString('fr-FR', options)}<br>
+                <i class="fas fa-users"></i> Population de référence : 13 ans et plus, 729 600 personnes à La Réunion
+            `;
+        }
+
+        // Chargement du classement
+        function loadRanking(rankingData) {
+            const maxPda = 33.5;
+            const listHtml = rankingData.map(item => `
+                <div class="ranking-item">
+                    <div class="ranking-position">
+                        ${item.position}
+                    </div>
+                    <div class="ranking-info">
+                        <div class="ranking-name">${item.name}</div>
+                        <div class="ranking-details">
+                            <span>PDA: <span class="ranking-value">${item.pda}%</span></span>
+                            <span>Évolution: <span class="${item.evolution > 0 ? 'trend-up' : item.evolution < 0 ? 'trend-down' : 'trend-stable'}">
+                                ${item.evolution > 0 ? '▲' : item.evolution < 0 ? '▼' : '●'} ${Math.abs(item.evolution)} pt
+                            </span></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: ${(item.pda / maxPda) * 100}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('ranking-list').innerHTML = listHtml;
+        }
+
+        // Chargement des émissions
+        function loadShows(shows) {
+            const showsHtml = shows.map(show => `
+                <div class="show-card">
+                    <div class="show-name">${show.name}</div>
+                    <div class="show-host">${show.host}</div>
+                    <div class="show-time">${show.time}</div>
+                    <div class="ranking-details">${show.desc}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('showsGrid').innerHTML = showsHtml;
+        }
+
+        // Chargement des fréquences
+        function loadFrequencies(frequencies) {
+            const freqHtml = frequencies.map(f => `
+                <div class="frequency-card">
+                    <span class="frequency-city">${f.city}</span>
+                    <span class="frequency-value">${f.freq}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('frequenciesGrid').innerHTML = freqHtml;
+        }
+
+        // Initialisation
+        createParticles();
+        loadData();
+        
+        // Rafraîchissement automatique toutes les heures (pour voir les mises à jour)
+        setInterval(loadData, 3600000);
+    </script>
+</body>
+</html>
