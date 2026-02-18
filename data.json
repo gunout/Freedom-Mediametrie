@@ -1,0 +1,51 @@
+{
+  "lastUpdate": "2025-12-10",
+  "period": "Septembre-Novembre 2025",
+  "freedom1": {
+    "pda": 33.5,
+    "audience": 177600,
+    "cumul": 24.3,
+    "evolution": -0.8,
+    "evolutionYear": -5.8,
+    "audienceEvolution": -7,
+    "duree": "2h34"
+  },
+  "freedom2": {
+    "pda": 5.3,
+    "evolution": 1.9,
+    "progressWidth": 16
+  },
+  "rankings": [
+    {"position": 1, "name": "Free Dom 1", "pda": 33.5, "evolution": -0.8},
+    {"position": 2, "name": "EXO FM", "pda": 11.3, "evolution": 0.5},
+    {"position": 3, "name": "Réunion La 1ère", "pda": 10.1, "evolution": -0.8},
+    {"position": 4, "name": "Chérie FM", "pda": 5.9, "evolution": -0.4},
+    {"position": 5, "name": "Antenne Réunion Radio", "pda": 5.6, "evolution": 2.0},
+    {"position": 6, "name": "Free Dom 2", "pda": 5.3, "evolution": 1.9},
+    {"position": 7, "name": "NRJ Réunion", "pda": 4.3, "evolution": -0.9},
+    {"position": 8, "name": "RER", "pda": 3.9, "evolution": -0.2},
+    {"position": 9, "name": "Rire et Chansons", "pda": 1.7, "evolution": 0.2}
+  ],
+  "shows": [
+    {"name": "TRAFIC", "host": "Bobby", "time": "15h-19h • Lundi-Vendredi", "desc": "Animateur historique, voix emblématique"},
+    {"name": "DROIT DE PAROLE", "host": "Mme Aude & Bobby", "time": "17h-18h • Lundi-Vendredi", "desc": "Émission juridique, depuis 1987"},
+    {"name": "LA MATINALE", "host": "Francky", "time": "6h-9h • Semaine", "desc": "Humour et bonne humeur"},
+    {"name": "CHALEUR TROPICALE", "host": "Équipe", "time": "20h-minuit • Tous les jours", "desc": "Rencontres, messages personnels"},
+    {"name": "LE SON DU SOLEIL", "host": "Max", "time": "10h-15h", "desc": "Musique et bonne humeur"},
+    {"name": "FREEDOMILLIONS", "host": "Équipe", "time": "7h15, 8h15, 11h10", "desc": "Jeu de cagnotte"}
+  ],
+  "frequencies": [
+    {"city": "Saint-Denis", "freq": "97.4"},
+    {"city": "Saint-Pierre", "freq": "97.4"},
+    {"city": "Saint-Paul", "freq": "95.0"},
+    {"city": "Saint-André", "freq": "106.2"},
+    {"city": "Saint-Benoît", "freq": "101.3"},
+    {"city": "Saint-Joseph", "freq": "106.1"},
+    {"city": "Cilaos", "freq": "98.8"},
+    {"city": "Le Port", "freq": "93.4"},
+    {"city": "Saint-Gilles", "freq": "107.1"},
+    {"city": "Saint-Leu", "freq": "95.0"},
+    {"city": "Sainte-Suzanne", "freq": "103.8"},
+    {"city": "La Possession", "freq": "93.4"}
+  ]
+}
